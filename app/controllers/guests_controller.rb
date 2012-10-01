@@ -1,5 +1,18 @@
 class GuestsController < ApplicationController
   def index
-    render text: 'Daniela and Harold'
+    @new_guest = Guest.new
+    @guests = Guest.all
+  end
+
+  def create
+    @new_guest = Guest.new(params[:guest])
+    if @new_guest.save
+      flash[:notice] = 'New guest created'
+      redirect_to guests_path
+    else
+      flash[:alert] = 'Sorry, your guest was not created'
+      @guests = Guest.all
+      render :index
+    end
   end
 end

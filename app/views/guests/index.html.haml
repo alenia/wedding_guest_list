@@ -1,0 +1,18 @@
+%h1 Daniela and Harold's Guest Plotter
+
+= simple_form_for @new_guest do |f|
+  = f.input :first_name
+  = f.input :last_name
+  = f.submit 'Add Guest'
+
+%table.guests
+  %thead
+    %tr
+      %th First Name
+      %th Last Name
+  - @guests.each do |guest|
+    %tr
+      %td= guest.first_name
+      %td= guest.last_name
+
+

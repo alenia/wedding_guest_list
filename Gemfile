@@ -13,11 +13,13 @@ gem "heroku"
 gem "pg"
 gem "haml"
 gem "haml-rails"
+gem "simple_form"
 
 group :development, :test do
   gem 'rspec-rails'
   gem 'jasmine'
   gem "headless"
+  gem "spin"
 end
 
 group :test do
