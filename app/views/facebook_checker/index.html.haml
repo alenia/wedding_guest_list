@@ -1,0 +1,16 @@
+%table
+  %thead
+    %tr
+      %th First Name
+      %th Last Name
+      %th Category?
+      %th Rank?
+      %th
+  - @friend_guests.each do |friend|
+    %tr
+      = form_for friend, url: guests_path do |f|
+        %td= friend.first_name
+        %td= friend.last_name
+        %td= f.select :category, options_for_select: Guest::CATEGORIES.map{|c| [c,c]}
+        %td= f.select :rank, options_for_select: (0..5).map{|n| [n,n]}
+        %td= f.submit

@@ -14,6 +14,7 @@ gem "pg"
 gem "haml"
 gem "haml-rails"
 gem "simple_form"
+gem "koala"
 
 group :development, :test do
   gem 'rspec-rails'
