@@ -14,9 +14,13 @@
     %tr
       %th First Name
       %th Last Name
+      %th Category
+      %th Rank
   - @guests.each do |guest|
     %tr
       %td= guest.first_name
       %td= guest.last_name
+      %td= guest.category
+      %td= guest.rank
 
 
