@@ -6,8 +6,9 @@ class FacebookGuestsController < ApplicationController
     friends = graph.get_connections("me", "friends", {"fields" => "first_name,last_name"})
     @friend_guests = friends.map do |friend|
       friend["facebook_id"] = friend.delete("id")
+      next if Guest.find_by_facebook_id(friend["facebook_id"])
       Guest.new(friend, without_protection: true) # since first_name, last_name, and facebook_id are the only attributes
-    end
+    end.compact
   end
 
   private
