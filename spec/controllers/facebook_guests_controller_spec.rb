@@ -15,7 +15,7 @@ describe FacebookGuestsController do
       get :new, token_for: 'Flugbert'
       assigns[:friend_guests].length.should == 2
       dee = assigns[:friend_guests][0]
-      dee.facebook_id.should == 1234567
+      dee.facebook_id.should == "1234567"
     end
 
     it 'does not include guests whose id matches real facebook guests' do

@@ -5,6 +5,7 @@ class GuestsController < ApplicationController
   end
 
   def create
+    ap params[:guest]
     @new_guest = Guest.new(params[:guest])
     if @new_guest.save
       flash[:notice] = 'New guest created'

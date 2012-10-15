@@ -14,7 +14,7 @@
         %td= friend.first_name
         %td= friend.last_name
         %td= f.select :category, options_for_select: Guest::CATEGORIES.map{|c| [c,c]}
-        %td= f.hidden_field :facebook_id, disabled: true
+        %td= f.hidden_field :facebook_id
         %td= f.hidden_field :first_name
         %td= f.hidden_field :last_name
         %td= f.submit
