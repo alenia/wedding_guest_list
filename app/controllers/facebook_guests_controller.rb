@@ -4,7 +4,7 @@ class FacebookGuestsController < ApplicationController
 
     graph = koala_graph_for(person)
     friends = graph.get_connections("me", "friends", {"fields" => "first_name,last_name"})
-    @friend_guests = friends.map do |friend|
+    @friend_guests = friends.sort_by{|f| f["last_name"]}.map do |friend|
       friend["facebook_id"] = friend.delete("id")
       next if guest_facebook_ids.include? friend["facebook_id"]
       Guest.new(friend, without_protection: true) # since first_name, last_name, and facebook_id are the only attributes

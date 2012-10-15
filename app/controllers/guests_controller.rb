@@ -8,7 +8,11 @@ class GuestsController < ApplicationController
     @new_guest = Guest.new(params[:guest])
     if @new_guest.save
       flash[:notice] = 'New guest created'
-      redirect_to guests_path
+      if params[:guest]["facebook_id"]
+        redirect_to new_facebook_guest_path
+      else
+        redirect_to guests_path
+      end
     else
       flash[:alert] = 'Sorry, your guest was not created'
       @guests = Guest.all
