@@ -7,7 +7,7 @@ class FacebookGuestsController < ApplicationController
     @friend_guests = friends.map do |friend|
       friend["facebook_id"] = friend.delete("id")
       next if guest_facebook_ids.include? friend["facebook_id"]
-      ap Guest.new(friend, without_protection: true) # since first_name, last_name, and facebook_id are the only attributes
+      Guest.new(friend, without_protection: true) # since first_name, last_name, and facebook_id are the only attributes
     end.compact
   end
 
