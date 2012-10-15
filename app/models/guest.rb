@@ -11,7 +11,7 @@ class Guest < ActiveRecord::Base
     "Daniela's coworker"
   ]
 
-  attr_accessible :first_name, :last_name, :category, :rank
+  attr_accessible :first_name, :last_name, :category, :rank, :facebook_id
   validates_presence_of :first_name, :last_name
   validates_inclusion_of :category, in: CATEGORIES, allow_blank: true
 end

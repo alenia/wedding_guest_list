@@ -1,6 +1,6 @@
 Wedding::Application.routes.draw do
   resources :guests
-  resources :facebook_checker
+  resources :facebook_guests
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.

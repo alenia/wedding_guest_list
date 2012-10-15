@@ -4,7 +4,9 @@
       %th First Name
       %th Last Name
       %th Category?
-      %th Rank?
+      %th
+      %th
+      %th
       %th
   - @friend_guests.each do |friend|
     %tr
@@ -12,5 +14,7 @@
         %td= friend.first_name
         %td= friend.last_name
         %td= f.select :category, options_for_select: Guest::CATEGORIES.map{|c| [c,c]}
-        %td= f.select :rank, options_for_select: (0..5).map{|n| [n,n]}
+        %td= f.hidden_field :facebook_id, disabled: true
+        %td= f.hidden_field :first_name
+        %td= f.hidden_field :last_name
         %td= f.submit

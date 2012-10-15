@@ -21,10 +21,13 @@ group :development, :test do
   gem 'jasmine'
   gem "headless"
   gem "spin"
+  gem 'awesome_print'
 end
 
 group :test do
   gem 'capybara'
   gem 'capybara-webkit'
+  gem 'webmock'
+  gem 'vcr'
 end
 
