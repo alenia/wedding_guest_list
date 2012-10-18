@@ -1,6 +1,6 @@
 class FacebookGuestsController < ApplicationController
   def new
-    person = params[:token_for] || "Daniela"
+    person = params[:token_for] || "Harold"
 
     graph = koala_graph_for(person)
     friends = graph.get_connections("me", "friends", {"fields" => "first_name,last_name"})
