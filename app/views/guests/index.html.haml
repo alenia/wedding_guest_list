@@ -4,7 +4,7 @@
   = f.input :first_name
   = f.input :last_name
   = f.input :category, as: :select, collection: Guest::CATEGORIES
-  = f.input :rank, as: :select, collection: (0..5), include_blank: false
+  = f.input :rank, as: :select, collection: (0..5)
   = f.submit 'Add Guest'
 
 
@@ -16,11 +16,15 @@
       %th Last Name
       %th Category
       %th Rank
+      %th
+      %th
   - @guests.each do |guest|
     %tr
       %td= guest.first_name
       %td= guest.last_name
       %td= guest.category
       %td= guest.rank
+      %td= link_to 'Edit', edit_guest_path(guest)
+      %td= link_to 'Delete', guest_path(guest), method: :delete
 
 

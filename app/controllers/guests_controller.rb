@@ -19,4 +19,25 @@ class GuestsController < ApplicationController
       render :index
     end
   end
+
+  def edit
+    @guest = Guest.find(params[:id])
+  end
+
+  def update
+    @guest = Guest.find(params[:id])
+
+    if @guest.update_attributes(params[:guest])
+      redirect_to guests_path, notice: 'Your guest has been updated'
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @guest = Guest.find(params[:id])
+    @guest.destroy
+
+    redirect_to guests_path
+  end
 end

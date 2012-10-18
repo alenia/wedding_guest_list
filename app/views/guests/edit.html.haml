@@ -1,0 +1,6 @@
+= simple_form_for @guest do |f|
+  = f.input :first_name
+  = f.input :last_name
+  = f.input :category, as: :select, collection: Guest::CATEGORIES
+  = f.input :rank, as: :select, collection: (0..5)
+  = f.submit 'Edit Guest'
