@@ -2,5 +2,5 @@
   = f.input :first_name
   = f.input :last_name
   = f.input :category, as: :select, collection: Guest::CATEGORIES
-  = f.input :rank, as: :select, collection: (0..5)
+  = f.input :plus_one, as: :select, collection: plus_one_options, label: 'Plus 1?', include_blank: false
   = f.submit 'Edit Guest'

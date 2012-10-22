@@ -4,18 +4,18 @@
   = f.input :first_name
   = f.input :last_name
   = f.input :category, as: :select, collection: Guest::CATEGORIES
-  = f.input :rank, as: :select, collection: (0..5)
+  = f.input :plus_one, as: :select, collection: plus_one_options, label: 'Plus 1?', include_blank: false
   = f.submit 'Add Guest'
 
 
-%h3 The total number of guests is #{@guests.count}
+%h3 The total number of guests is #{Guest.count_with_plus_ones}
 %table.guests
   %thead
     %tr
       %th First Name
       %th Last Name
       %th Category
-      %th Rank
+      %th Plus 1?
       %th
       %th
   - @guests.each do |guest|
@@ -23,7 +23,7 @@
       %td= guest.first_name
       %td= guest.last_name
       %td= guest.category
-      %td= guest.rank
+      %td= guest.plus_one_option
       %td= link_to 'Edit', edit_guest_path(guest)
       %td= link_to 'Delete', guest_path(guest), method: :delete
 
