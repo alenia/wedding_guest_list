@@ -1,12 +1,20 @@
 require 'spec_helper'
 
 describe GuestsController do
-  it 'has an index that loads a new guest and all the guests' do
-    guest = Guest.create!(first_name: 'Rory', last_name: 'Williams')
-    get :index
-    response.should be_success
-    assigns[:new_guest].should be_new_record
-    assigns[:guests].should == [guest]
+  describe 'GET #index' do
+    it 'loads a new guest' do
+      get :index
+      response.should be_success
+      assigns[:new_guest].should be_new_record
+    end
+
+    it 'loads guests sorted alphabetically and by category' do
+      a_couple_friend = Guest.create!(first_name: 'Fake', last_name: 'Aaa', category: "Couple's friend")
+      z_couple_friend = Guest.create!(first_name: 'Faker', last_name: 'Zzz', category: "Couple's friend")
+      a_daniela_friend = Guest.create!(first_name: 'Fakest', last_name: 'Aaa', category: "Daniela's friend")
+      get :index
+      assigns[:guests].should == [a_couple_friend, z_couple_friend, a_daniela_friend]
+    end
   end
 
   describe 'POST #create' do

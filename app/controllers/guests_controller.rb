@@ -1,7 +1,7 @@
 class GuestsController < ApplicationController
   def index
     @new_guest = Guest.new
-    @guests = Guest.all
+    @guests = Guest.order('category, last_name, first_name')
   end
 
   def create
@@ -15,7 +15,7 @@ class GuestsController < ApplicationController
       end
     else
       flash[:alert] = 'Sorry, your guest was not created'
-      @guests = Guest.all
+      @guests = Guest.all(order: 'category, last_name, first_name')
       render :index
     end
   end
