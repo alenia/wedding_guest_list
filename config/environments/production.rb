@@ -1,8 +1,8 @@
 Wedding::Application.configure do
-  config.middleware.insert_after(::Rack::Lock, "::Rack::Auth::Basic", "Just for us!") do |u, p|
-    [u, p] == [ENV['BASIC_AUTH_USER'], ENV['BASIC_AUTH_PASSWORD']]
-  end
-  
+  # config.middleware.insert_after(::Rack::Lock, "::Rack::Auth::Basic", "Just for us!") do |u, p|
+    # [u, p] == [ENV['BASIC_AUTH_USER'], ENV['BASIC_AUTH_PASSWORD']]
+  # end
+
   # Settings specified here will take precedence over those in config/application.rb
 
   # Code is not reloaded between requests
