@@ -2,6 +2,7 @@ Wedding::Application.routes.draw do
   resources :guests
   resources :facebook_guests
 
+  match '/invite' => 'pages#invite'
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
    root :to => 'guests#index'
