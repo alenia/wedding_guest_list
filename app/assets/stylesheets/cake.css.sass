@@ -1,30 +1,28 @@
 $unit: 3px
 
-body.cake
-  ol
-    list-style-type: none
-    padding: 0
+body.stripe_patterns
+  section
     margin: 1%
     float: left
     width: 30%
-    border-bottom: $unit solid #ccc
-    li
-      &.label
-        background: none
-        border: 1px solid #666
-        margin-bottom: 5 * $unit !important
-      display: block
-      background-color: #ccf
-      @for $i from 2 through 11
-        &:nth-child(#{$i})
-          height: $unit * fibonacci($i - 1)
     &.alternating li
-      &:nth-child(odd)
+      &:nth-child(even)
         background-color: #fff
     &.padded li
       margin-bottom: 2*$unit
     &.spaced li
-      @for $i from 2 through 10
+      @for $i from 1 through 10
         &:nth-child(#{$i})
-          margin-bottom: $unit * fibonacci($i - 1)
+          margin-bottom: $unit * fibonacci($i)
+  ol
+    list-style-type: none
+    padding: 0
+    margin: 0
+    border-bottom: $unit solid #ccc
+    li
+      display: block
+      background-color: #ccf
+      @for $i from 1 through 11
+        &:nth-child(#{$i})
+          height: $unit * fibonacci($i)
 

@@ -1,4 +1,4 @@
 class PagesController < ApplicationController
   def invite; end
-  def cake; end
+  def stripe_patterns; end
 end
