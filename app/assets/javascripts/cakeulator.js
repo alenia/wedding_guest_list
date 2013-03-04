@@ -1,45 +1,75 @@
 (function ($) {
-  var $scope = $('body.cakeulator');
-  var $tiers = $scope.find('.tiers > div');
-  var $lis = $scope.find('ol li');
+  var $scope, $tiers, $lis;
+  $scope = $('body.cakeulator');
+  $tiers = $scope.find('.tiers > div');
+  $lis = $scope.find('ol li');
 
-  var multiplyOne = function ($item, proportion, callback) {
-    var origHeight = $item.height();
-    $item.height(origHeight * proportion);
-    if (callback) { callback($item, origHeight); }
+  var transitions = {
+    multiplyOne: function ($item, proportion, callback) {
+      var origHeight = $item.height();
+      $item.height(origHeight * proportion);
+      if (callback) { callback(origHeight, $item); }
+    },
+
+    multiplyEach: function ($collection,proportion,callback){
+      var self = this;
+      $collection.each(function (iterator, item){
+        self.multiplyOne($(item), proportion, callback);
+      })
+    },
+
+    moveTop: function ($item, distance) {
+      var origTop =  parseInt($item.css('top'));
+      $item.css('top',(origTop + distance) + 'px');
+    },
+  }
+
+  var actions = {
+    setFibSpacing: function() {
+      $lis.each(function (iterator, li){
+        var height = $(li).height();
+        $(li).css('margin-bottom',height + 'px')
+      });
+    },
+
+    scaleTiers: function(value) {
+      ratio = $scope.find('input#first').val() == 4 ? 4 : 5;
+      var unitLength = $tiers.height() / ratio;
+      var proportion = value / unitLength;
+      transitions.multiplyEach($tiers,proportion, function (origHeight, $tier) {
+        transitions.moveTop($tier.find('.cakebottom'), $tier.height() - origHeight);
+      });
+    },
+
+    //essentially a toggle even if height is 4 or 5
+    toggleTierHeight: function($tier, value) {
+      var ratio = value === "4" ? 4/5 : 5/4;
+      transitions.multiplyOne($tier, ratio, function (origHeight){
+        transitions.moveTop($tier.find('.cakebottom'), $tier.height() - origHeight);
+      });
+    },
+
+    scaleStripes: function(value) {
+      var unitLength = $lis.height();
+      var proportion = value / unitLength;
+      transitions.multiplyEach($lis,proportion);
+    }
   };
 
-  var multiplyEach = function ($collection,proportion,callback){
-    $collection.each(function (iterator, item){
-      multiplyOne($(item), proportion, callback);
-    })
-  };
-
-  var moveTop = function ($item, distance) {
-    var origTop = parseInt($item.css('top'));
-    $item.css('top',(origTop + distance) + 'px');
-  };
-
-  var tierHeightSwitch = function (tierName) {
-    $scope.find('input#' + tierName).change(function (e) {
-      var ratio = $scope.find('input#' + tierName).val() === "4" ? 4/5 : 5/4;
-      var $tier = $scope.find('.tiers .' + tierName);
-      var origHeight = $tier.height();
-      multiplyOne($tier, ratio);
-      moveTop($tier.find('.cakebottom'), $tier.height() - origHeight);
+  var bindTierHeightToggle = function (tierName) {
+    var $trigger = $scope.find('input#' + tierName);
+    $trigger.change(function (e) {
+      actions.toggleTierHeight($scope.find('.tiers .' + tierName), $trigger.val());
     });
 
   };
 
-  tierHeightSwitch('first');
-  tierHeightSwitch('second');
-  tierHeightSwitch('third');
+  bindTierHeightToggle('first');
+  bindTierHeightToggle('second');
+  bindTierHeightToggle('third');
 
   $scope.find('button#fib_spacing').click(function (e) {
-    $lis.each(function (iterator, li){
-      var height = $(li).height();
-      $(li).css('margin-bottom',height + 'px')
-    });
+    actions.setFibSpacing();
     e.preventDefault();
   });
 
@@ -48,17 +78,10 @@
   });
 
   $scope.find('input#unit').change(function (e) {
-    var unitLength = $lis.height();
-    var proportion = e.target.valueAsNumber / unitLength;
-    multiplyEach($lis,proportion);
+    actions.scaleStripes(e.currentTarget.valueAsNumber);
   });
 
   $scope.find('input#tiers').change(function (e) {
-    ratio = $scope.find('input#first').val() == 4 ? 4 : 5;
-    var unitLength = $tiers.height() / ratio;
-    var proportion = e.target.valueAsNumber / unitLength;
-    multiplyEach($tiers,proportion, function ($tier, origHeight) {
-      moveTop($tier.find('.cakebottom'), $tier.height() - origHeight);
-    });
+    actions.scaleTiers(e.target.valueAsNumber);
   });
 })($);
