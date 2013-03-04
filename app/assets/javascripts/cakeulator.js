@@ -22,16 +22,9 @@
       var origTop =  parseInt($item.css('top'));
       $item.css('top',(origTop + distance) + 'px');
     },
-  }
+  };
 
   var actions = {
-    setFibSpacing: function() {
-      $lis.each(function (iterator, li){
-        var height = $(li).height();
-        $(li).css('margin-bottom',height + 'px')
-      });
-    },
-
     scaleTiers: function(value) {
       ratio = $scope.find('input#first').val() == 4 ? 4 : 5;
       var unitLength = $tiers.height() / ratio;
@@ -49,10 +42,38 @@
       });
     },
 
+    toggleFibSpacing: function(isChecked) {
+      this.isFibSpacing = isChecked;
+      // TODO: actions should not be responsible for fetching form values
+      this.scaleStripeMargin($scope.find('input#spacing').val());
+    },
+
     scaleStripes: function(value) {
       var unitLength = $lis.height();
       var proportion = value / unitLength;
       transitions.multiplyEach($lis,proportion);
+    },
+
+    scaleStripeMargin: function(value) {
+      if (this.isFibSpacing) {
+        this._fibScaleStripeMargin(value);
+      } else {
+        this._linearScaleStripeMargin(value);
+      }
+    },
+
+    //private
+
+    _linearScaleStripeMargin: function(value) {
+      $lis.css('margin-bottom', value + 'px')
+    },
+
+    _fibScaleStripeMargin: function(value) {
+      var proportion = value / $lis.height();
+      $lis.each(function (iterator, li){
+        var height = $(li).height();
+        $(li).css('margin-bottom', (height * proportion) + 'px')
+      });
     }
   };
 
@@ -68,13 +89,12 @@
   bindTierHeightToggle('second');
   bindTierHeightToggle('third');
 
-  $scope.find('button#fib_spacing').click(function (e) {
-    actions.setFibSpacing();
-    e.preventDefault();
+  $scope.find('input#fib_spacing').change(function (e) {
+    actions.toggleFibSpacing(e.currentTarget.checked);
   });
 
   $scope.find('input#spacing').change(function (e) {
-    $lis.css('margin-bottom',e.target.value + 'px')
+    actions.scaleStripeMargin(e.currentTarget.value);
   });
 
   $scope.find('input#unit').change(function (e) {
