@@ -7,6 +7,7 @@ body.cake
     margin: 1%
     float: left
     width: 30%
+    border-bottom: $unit solid #ccc
     li
       &.label
         background: none
@@ -18,12 +19,12 @@ body.cake
         &:nth-child(#{$i})
           height: $unit * fibonacci($i - 1)
     &.alternating li
-      &:nth-child(even)
+      &:nth-child(odd)
         background-color: #fff
     &.padded li
       margin-bottom: 2*$unit
     &.spaced li
-      @for $i from 2 through 11
+      @for $i from 2 through 10
         &:nth-child(#{$i})
           margin-bottom: $unit * fibonacci($i - 1)
 
