@@ -35,6 +35,14 @@
   tierHeightSwitch('second');
   tierHeightSwitch('third');
 
+  $scope.find('button#fib_spacing').click(function (e) {
+    $lis.each(function (iterator, li){
+      var height = $(li).height();
+      $(li).css('margin-bottom',height + 'px')
+    });
+    e.preventDefault();
+  });
+
   $scope.find('input#spacing').change(function (e) {
     $lis.css('margin-bottom',e.target.value + 'px')
   });
