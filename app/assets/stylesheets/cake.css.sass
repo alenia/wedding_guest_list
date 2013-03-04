@@ -19,10 +19,22 @@ $unit: 3px
   &:before
     top: $height - $width/2
 
+fieldset
+  border: none
 body.stripe_patterns, body.cakeulator
   section
     margin: 1%
     float: left
+  ol
+    list-style-type: none
+    padding: 0
+    margin: 0
+    li
+      display: block
+      background-color: #99f
+      @for $i from 1 through 11
+        &:nth-child(#{$i})
+          height: $unit * fibonacci($i)
 
 body.stripe_patterns
   section
@@ -36,23 +48,20 @@ body.stripe_patterns
       @for $i from 1 through 10
         &:nth-child(#{$i})
           margin-bottom: $unit * fibonacci($i)
-  ol
-    list-style-type: none
-    padding: 0
-    margin: 0
-    border-bottom: $unit solid #ccc
-    li
-      display: block
-      background-color: #ccf
-      @for $i from 1 through 11
-        &:nth-child(#{$i})
-          height: $unit * fibonacci($i)
+    ol
+      border-bottom: $unit solid #ccc
 
 body.cakeulator
   $inch: 25px
+  ol li
+    margin-bottom: 2 * $unit
+    background-color: rgba(0,0,255,.3)
   section
     width: 500px
-    margin-top: 100px
+    position: relative
+    .tiers, .stripes
+      position: absolute
+      width: 16 * $inch
   .tiers
     &> div
       background: #ccc
