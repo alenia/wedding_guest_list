@@ -1,15 +1,37 @@
 $unit: 3px
 
-body.stripe_patterns
+@mixin cylinder($width,$height,$proportion: .33)
+  position: relative
+  width: $width
+  height: $height
+  &:before, &:after
+    // only using chrome for now, so not adding in moz
+    -webkit-transform: scaley($proportion)
+    width: $width
+    height: $width
+    border-radius: $width
+    display: block
+    content: ' '
+    position: absolute
+  // after is on top of before so that the z-index works
+  &:after
+    top: -1 * $width/2
+  &:before
+    top: $height - $width/2
+
+body.stripe_patterns, body.cakeulator
   section
     margin: 1%
     float: left
+
+body.stripe_patterns
+  section
     width: 30%
     &.alternating li
       &:nth-child(even)
         background-color: #fff
     &.padded li
-      margin-bottom: 2*$unit
+      margin-bottom: 2 * $unit
     &.spaced li
       @for $i from 1 through 10
         &:nth-child(#{$i})
@@ -25,4 +47,36 @@ body.stripe_patterns
       @for $i from 1 through 11
         &:nth-child(#{$i})
           height: $unit * fibonacci($i)
+
+body.cakeulator
+  $inch: 25px
+  section
+    width: 500px
+    margin-top: 100px
+  .tiers
+    &> div
+      background: #ccc
+      height: 4 * $inch
+      margin: auto
+    .first
+      width: 8 * $inch
+    .second
+      width: 12 * $inch
+    .third
+      width: 16 * $inch
+    &.angle > div
+      &:before
+        background: #ccc
+      &:after
+        background: #eee
+      &.first
+        z-index: 3
+        @include cylinder(8 * $inch, 4 * $inch)
+      &.second
+        z-index: 2
+        @include cylinder(12 * $inch, 4 * $inch)
+      &.third
+        z-index: 1
+        @include cylinder(16 * $inch, 4 * $inch)
+
 
