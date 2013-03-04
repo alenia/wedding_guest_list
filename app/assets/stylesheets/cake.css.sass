@@ -4,19 +4,20 @@ $unit: 3px
   position: relative
   width: $width
   height: $height
-  &:before, &:after
+  // So silly! I can't change &:before with jQuery, so I can't use the sliders
+  .cakebottom, &:after
     // only using chrome for now, so not adding in moz
     -webkit-transform: scaley($proportion)
     width: $width
     height: $width
     border-radius: $width
     display: block
-    content: ' '
     position: absolute
   // after is on top of before so that the z-index works
   &:after
+    content: ' '
     top: -1 * $width/2
-  &:before
+  .cakebottom
     top: $height - $width/2
 
 fieldset
@@ -57,7 +58,7 @@ body.cakeulator
     margin-bottom: 2 * $unit
     background-color: rgba(0,0,255,.3)
   section
-    width: 500px
+    width: 45%
     position: relative
     .tiers, .stripes
       position: absolute
@@ -74,7 +75,7 @@ body.cakeulator
     .third
       width: 16 * $inch
     &.angle > div
-      &:before
+      .cakebottom
         background: #ccc
       &:after
         background: #eee
