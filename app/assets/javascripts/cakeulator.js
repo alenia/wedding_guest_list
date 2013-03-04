@@ -78,9 +78,9 @@
   };
 
   var bindTierHeightToggle = function (tierName) {
-    var $trigger = $scope.find('input#' + tierName);
+    var $trigger = $scope.find('input[name="' + tierName + '"]');
     $trigger.change(function (e) {
-      actions.toggleTierHeight($scope.find('.tiers .' + tierName), $trigger.val());
+      actions.toggleTierHeight($scope.find('.tiers .' + tierName), e.currentTarget.value);
     });
 
   };
@@ -97,7 +97,7 @@
     actions.scaleStripeMargin(e.currentTarget.value);
   });
 
-  $scope.find('input#unit').change(function (e) {
+  $scope.find('input#stripes').change(function (e) {
     actions.scaleStripes(e.currentTarget.valueAsNumber);
   });
 
