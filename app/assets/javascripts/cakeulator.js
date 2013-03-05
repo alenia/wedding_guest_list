@@ -106,6 +106,29 @@
     }
   };
 
+  var createUrl = function(root) {
+    var url, params;
+    params = {};
+    _(['spacing','stripes','tiers']).each(function (inputName){
+      params[inputName] = $scope.find('input#' + inputName).val();
+    });
+    params['fib_spacing'] = $scope.find('input#fib_spacing').prop('checked');
+
+    _(['first','second','third']).each(function (tierName) {
+      params[tierName + '_tier'] = $scope.find('input[name="' + tierName + '"]:checked').val();
+    });
+
+    url = root + '?';
+    _(params).each(function (value, key) {
+      url += key + '=' + value + '&'
+    });
+    return url;
+  }
+
+  $scope.find('a#generate_url').click(function (e) {
+    $('pre.url').text(createUrl($(e.currentTarget).data('rooturl')));
+  });
+
   $scope.find('input#fib_spacing').change(function (e) {
     actions.toggleFibSpacing(e.currentTarget.checked);
   });
