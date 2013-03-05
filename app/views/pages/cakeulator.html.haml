@@ -2,41 +2,41 @@
   %fieldset
     %span
       %label spacing
-      %input#spacing{type: :range, min: 1, max: 40, value: 3}
+      %input#spacing{type: :range, min: 1, max: 40, value: params[:spacing] || 3}
     %span
       %label{for: 'fib_spacing'}
-        %input#fib_spacing{type: :checkbox}
+        %input#fib_spacing{type: :checkbox, checked: params[:fib_spacing] == 'true'}
         use fibonacci spacing
   %fieldset
     %label stripe height
-    %input#stripes{type: :range, min: 1, max: 20, value: 3}
+    %input#stripes{type: :range, min: 1, max: 20, value: params[:stripes] || 3}
   %fieldset
     %label tiers height
-    %input#tiers{type: :range, min: 5, max: 45, value: 25}
+    %input#tiers{type: :range, min: 5, max: 45, value: params[:tiers] || 20}
   %fieldset
     %span
       tier 1 height:
       %label{for: 'first_4'}
-        %input#first_4{type: :radio, value: 4, name: 'first', checked: 'checked'}
+        %input#first_4{type: :radio, value: 4, name: 'first', checked: params[:first_tier] != '5'}
         4
       %label{for: 'first_5'}
-        %input#first_5{type: :radio, value: 5, name: 'first'}
+        %input#first_5{type: :radio, value: 5, name: 'first', checked: params[:first_tier] == '5'}
         5
     %span
       tier 2 height:
       %label{for: 'second_4'}
-        %input#second_4{type: :radio, value: 4, name: 'second', checked: 'checked'}
+        %input#second_4{type: :radio, value: 4, name: 'second', checked: params[:second_tier] != '5'}
         4
       %label{for: 'second_5'}
-        %input#second_5{type: :radio, value: 5, name: 'second'}
+        %input#second_5{type: :radio, value: 5, name: 'second', checked: params[:second_tier] == '5'}
         5
     %span
       tier 3 height:
       %label{for: 'third_4'}
-        %input#third_4{type: :radio, value: 4, name: 'third', checked: 'checked'}
+        %input#third_4{type: :radio, value: 4, name: 'third', checked: params[:third_tier] != '5'}
         4
       %label{for: 'third_5'}
-        %input#third_5{type: :radio, value: 5, name: 'third'}
+        %input#third_5{type: :radio, value: 5, name: 'third', checked: params[:third_tier] == '5'}
         5
 %section
   .tiers.straight

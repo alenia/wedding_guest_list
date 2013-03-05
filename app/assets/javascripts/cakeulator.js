@@ -106,13 +106,6 @@
     }
   };
 
-  _(['first','second','third']).each(function (tierName) {
-    var $trigger = $scope.find('input[name="' + tierName + '"]');
-    $trigger.change(function (e) {
-      actions.toggleTierHeight($scope.find('.tiers .' + tierName), e.currentTarget.value);
-    });
-  });
-
   $scope.find('input#fib_spacing').change(function (e) {
     actions.toggleFibSpacing(e.currentTarget.checked);
   });
@@ -129,6 +122,24 @@
     actions.scaleTiers(e.target.valueAsNumber);
   });
 
+  _(['first','second','third']).each(function (tierName) {
+    var $trigger = $scope.find('input[name="' + tierName + '"]');
+    $trigger.change(function (e) {
+      actions.toggleTierHeight($scope.find('.tiers .' + tierName), e.currentTarget.value);
+    });
+  });
+
+  _(['spacing','stripes','tiers','fib_spacing']).each(function (inputName){
+    $scope.find('input#' + inputName).change();
+  });
+
+  _(['first','second','third']).each(function (tierName) {
+    //TODO: make less hacky. this includes fixing the hacky toggleTierHeight method.
+    $trigger = $scope.find('input[name="' + tierName + '"]:checked');
+    if ($trigger.val() === '5') {
+      $trigger.change();
+    }
+  });
   markTierStraddlers();
 })($);
 
