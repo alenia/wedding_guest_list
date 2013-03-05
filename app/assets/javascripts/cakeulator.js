@@ -29,37 +29,61 @@
     getTierBoundaries: function () {
       var tierBoundaries = [];
       $tiers.each(function (index, tier) {
-        var tierTop = $(tier).offset().top;
-        tierBoundaries.push(tierTop);
-        tierBoundaries.push(tierTop + $(tier).height());
+        var b = boundaries($(tier));
+        tierBoundaries.push(b.top);
+        tierBoundaries.push(b.bottom);
       });
 
       return _(tierBoundaries).uniq();
     },
 
     getTierStraddlers: function () {
-      var tierStraddlers = $('');
+      var $tierStraddlers = $('');
       $lis.each(function (index, li) {
-        var top, bottom;
-        top = $(li).offset().top;
-        bottom = top + $(li).height();
-        _(collections.getTierBoundaries()).each(function (num) {
-          if ((bottom > num) && (num > top)) {
-            tierStraddlers = tierStraddlers.add(li);
+        var b = boundaries($(li));
+        _(collections.getTierBoundaries()).each(function (boundaryLoc) {
+          if ((b.bottom > boundaryLoc) && (boundaryLoc > b.top)) {
+            var $li = $(li);
+            $li.data('straddlerOffset',boundaryLoc - b.top)
+            $tierStraddlers = $tierStraddlers.add($li);
           }
         });
       });
-      return tierStraddlers;
-    }
+      return $tierStraddlers;
+    },
   };
 
+  var boundaries = function($item) {
+    var self = {};
+    self.top = $item.offset().top;
+    self.bottom = self.top + $item.height();
+    return self;
+  };
 
   var markTierStraddlers = function () {
     $lis.css('background-color', 'rgba(0,0,255,.3)');
     collections.getTierStraddlers().css('background-color', 'rgba(255,0,0,.5)');
   };
 
+  var moveTierStraddlers = function() {
+    for (var i=0; i < 3; i++) {
+      var $li = collections.getTierStraddlers().first();
+      var prevLiMargin = parseInt($li.prev('li').css('margin-bottom'));
+      var margin = $li.data('straddlerOffset') + prevLiMargin;
+      $li.css('margin-top', margin + 'px')
+    }
+  };
+
+
   actions = {
+    render: function() {
+      $lis.css('margin-top', '0px');
+      if (this.reflowStripes) {
+        moveTierStraddlers();
+      }
+      markTierStraddlers();
+    },
+
     scaleTiers: function (value) {
       var ratio, unitLength, proportion;
       ratio = $scope.find('input#first').val() === 4 ? 4 : 5;
@@ -68,7 +92,7 @@
       transitions.multiplyEach($tiers, proportion, function (origHeight, $tier) {
         transitions.moveTop($tier.find('.cakebottom'), $tier.height() - origHeight);
       });
-      markTierStraddlers();
+      this.render();
     },
 
     //essentially a toggle even if height is 4 or 5
@@ -77,20 +101,25 @@
       transitions.multiplyOne($tier, ratio, function (origHeight) {
         transitions.moveTop($tier.find('.cakebottom'), $tier.height() - origHeight);
       });
-      markTierStraddlers();
+      this.render();
     },
 
     toggleFibSpacing: function (isChecked) {
       this.isFibSpacing = isChecked;
       // TODO: actions should not be responsible for fetching form values
       this.scaleStripeMargin($scope.find('input#spacing').val());
-      markTierStraddlers();
+      this.render();
+    },
+
+    toggleReflowStripes: function (isChecked) {
+      this.reflowStripes = isChecked;
+      this.render();
     },
 
     scaleStripes: function (value) {
       var proportion = value / $lis.height();
       transitions.multiplyEach($lis, proportion);
-      markTierStraddlers();
+      this.render();
     },
 
     scaleStripeMargin: function (value) {
@@ -99,7 +128,7 @@
       } else {
         this._linearScaleStripeMargin(value);
       }
-      markTierStraddlers();
+      this.render();
     },
 
     //private
@@ -123,7 +152,10 @@
     _(['spacing', 'stripes', 'tiers']).each(function (inputName) {
       params[inputName] = $scope.find('input#' + inputName).val();
     });
-    params['fib_spacing'] = $scope.find('input#fib_spacing').prop('checked');
+
+    _(['fib_spacing','reflow_stripes']).each(function (inputName) {
+      params[inputName] = $scope.find('input#' + inputName).prop('checked');
+    });
 
     _(['first', 'second', 'third']).each(function (tierName) {
       params[tierName + '_tier'] = $scope.find('input[name="' + tierName + '"]:checked').val();
@@ -142,6 +174,10 @@
 
   $scope.find('input#fib_spacing').change(function (e) {
     actions.toggleFibSpacing(e.currentTarget.checked);
+  });
+
+  $scope.find('input#reflow_stripes').change(function (e) {
+    actions.toggleReflowStripes(e.currentTarget.checked);
   });
 
   $scope.find('input#spacing').change(function (e) {
@@ -163,7 +199,7 @@
     });
   });
 
-  _(['spacing', 'stripes', 'tiers', 'fib_spacing']).each(function (inputName) {
+  _(['spacing', 'stripes', 'tiers', 'fib_spacing', 'reflow_stripes']).each(function (inputName) {
     $scope.find('input#' + inputName).change();
   });
 
@@ -174,7 +210,7 @@
       $trigger.change();
     }
   });
-  markTierStraddlers();
+  actions.render();
 })($);
 
 
