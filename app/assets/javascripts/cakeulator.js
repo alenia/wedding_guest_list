@@ -15,7 +15,7 @@ window.cakeulator = window.cakeulator || {};
     });
 
     _(['first', 'second', 'third']).each(function (tierName) {
-      //TODO: make less hacky. this includes fixing the hacky toggleTierHeight method.
+      //TODO: make less hacky. (resolve with getInch in cakeulator.Values)
       var $trigger = $scope.find('input[name="' + tierName + '"]:checked');
       if ($trigger.val() === '5') {
         $trigger.change();
@@ -23,7 +23,6 @@ window.cakeulator = window.cakeulator || {};
     });
     cakeulator.Actions.render();
   };
-
 
   tierUtils = {
     markTierStraddlers: function () {
@@ -47,6 +46,8 @@ window.cakeulator = window.cakeulator || {};
       tierUtils.moveTierStraddlers();
     }
     tierUtils.markTierStraddlers();
+    $scope.find('#spacing_value').text(cakeulator.Values.getSpacingHeightInInches().toFixed(2) + ' in');
+    $scope.find('#stripe_height_value').text(cakeulator.Values.getStripeHeightInInches().toFixed(2) + ' in');
   };
 
   formUtils = {
