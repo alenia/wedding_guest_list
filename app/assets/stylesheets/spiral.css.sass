@@ -1,0 +1,81 @@
+$unit_length: 10px
+$fib_count: 11
+$border_color: black
+$border_width: 1px
+
+@mixin rounded($vert, $horz, $radius)
+  border-#{$vert}: 2*$border_width solid $border-color
+  border-#{$horz}: 2*$border_width solid $border-color
+  border-#{$vert}-#{$horz}-radius: $radius
+  -moz-border-radius-#{$vert}-#{$horz}: $radius
+  -webkit-border-radius-#{$vert}-#{$horz}: $radius
+
+
+ol.spiral
+  float: left
+  position: relative
+  list-style: none
+  border: $border_width solid $border_color
+  width: fibonacci($fib_count + 1) * $unit_length
+  height: fibonacci($fib_count) * $unit_length
+  padding: 0
+  li
+    box-sizing: border-box
+    border: $border_width solid $border_color
+    position: absolute
+    margin: 0
+    padding: 0
+    display: block
+    &:after
+      content: ''
+      display: block
+      box-sizing: border-box
+    @for $i from $fib_count + 1 through 20
+      &:nth-child(#{$i})
+        display: none
+    @for $i from 1 through $fib_count
+      &:nth-child(#{$i})
+        $l: $unit_length * fibonacci($i)
+        height: $l
+        width: $l
+        &:after
+          height: $l
+          width: $l
+          @if $i%4 == 0
+            @include rounded('top', 'right', $l)
+          @if $i%4 == 1
+            @include rounded('top', 'left', $l)
+          @if $i%4 == 2
+            @include rounded('bottom', 'left', $l)
+          @if $i%4 == 3
+            @include rounded('bottom', 'right', $l)
+    &:nth-child(#{$fib_count})
+      left: $unit_length * fibonacci($fib_count - 1)
+    &:nth-child(#{$fib_count - 1})
+      top: $unit_length * fibonacci($fib_count - 2)
+    &:nth-child(#{$fib_count - 3})
+      left: $unit_length * fibonacci($fib_count - 2)
+    // Now onto inner things
+    &:nth-child(#{$fib_count - 4})
+      left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 5))
+      top: $unit_length * fibonacci($fib_count - 3)
+    &:nth-child(#{$fib_count - 5})
+      left: $unit_length * fibonacci($fib_count - 2)
+      top: $unit_length * (fibonacci($fib_count - 3) + fibonacci($fib_count - 6))
+    &:nth-child(#{$fib_count - 6})
+      left: $unit_length * fibonacci($fib_count - 2)
+      top: $unit_length * fibonacci($fib_count - 3)
+    &:nth-child(#{$fib_count - 7})
+      left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 6))
+      top: $unit_length * fibonacci($fib_count - 3)
+    &:nth-child(#{$fib_count - 8})
+      left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 6) + fibonacci($fib_count - 9))
+      top: $unit_length * (fibonacci($fib_count - 3) + fibonacci($fib_count - 7))
+    &:nth-child(#{$fib_count - 9})
+      left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 6))
+      top: $unit_length * (fibonacci($fib_count - 3) + fibonacci($fib_count - 7) + fibonacci($fib_count - 10))
+    &:nth-child(#{$fib_count - 10})
+      left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 6))
+      top: $unit_length * (fibonacci($fib_count - 3) + fibonacci($fib_count - 7))
+
+
