@@ -1,7 +1,6 @@
-$unit_length: 10px
-$fib_count: 11
+$unit_length: 20px
 $border_color: black
-$border_width: 1px
+$border_width: 2px
 
 @mixin rounded($vert, $horz, $radius)
   border-#{$vert}: 2*$border_width solid $border-color
@@ -10,37 +9,26 @@ $border_width: 1px
   -moz-border-radius-#{$vert}-#{$horz}: $radius
   -webkit-border-radius-#{$vert}-#{$horz}: $radius
 
-
-ol.spiral
-  float: left
-  position: relative
-  list-style: none
-  border: $border_width solid $border_color
+@mixin fib_spiral($fib_count)
   width: fibonacci($fib_count + 1) * $unit_length
   height: fibonacci($fib_count) * $unit_length
-  padding: 0
   li
-    box-sizing: border-box
-    border: $border_width solid $border_color
-    position: absolute
-    margin: 0
-    padding: 0
-    display: block
-    &:after
-      content: ''
-      display: block
-      box-sizing: border-box
     @for $i from $fib_count + 1 through 20
       &:nth-child(#{$i})
         display: none
     @for $i from 1 through $fib_count
-      &:nth-child(#{$i})
-        $l: $unit_length * fibonacci($i)
-        height: $l
-        width: $l
-        &:after
-          height: $l
-          width: $l
+      $l: $unit_length * fibonacci($i)
+      &:nth-child(#{$i}):after
+        @if $fib_count == 8
+          @if $i%4 == 0
+            @include rounded('bottom', 'right', $l)
+          @if $i%4 == 1
+            @include rounded('top', 'right', $l)
+          @if $i%4 == 2
+            @include rounded('top', 'left', $l)
+          @if $i%4 == 3
+            @include rounded('bottom', 'left', $l)
+        @else
           @if $i%4 == 0
             @include rounded('top', 'right', $l)
           @if $i%4 == 1
@@ -77,5 +65,38 @@ ol.spiral
     &:nth-child(#{$fib_count - 10})
       left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 6))
       top: $unit_length * (fibonacci($fib_count - 3) + fibonacci($fib_count - 7))
+    &:nth-child(#{$fib_count - 11})
+      left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 6) + fibonacci($fib_count - 10))
+      top: $unit_length * (fibonacci($fib_count - 3) + fibonacci($fib_count - 7))
+
+
+ol.spiral
+  @for $i from 1 through 20
+    &.fib_count_#{$i}
+      @include fib_spiral($i)
+  float: left
+  position: relative
+  list-style: none
+  border: $border_width solid $border_color
+  padding: 0
+  li
+    box-sizing: border-box
+    border: $border_width solid $border_color
+    position: absolute
+    margin: 0
+    padding: 0
+    display: block
+    &:after
+      content: ''
+      display: block
+      box-sizing: border-box
+    @for $i from 1 through 20
+      &:nth-child(#{$i})
+        $l: $unit_length * fibonacci($i)
+        height: $l
+        width: $l
+        &:after
+          height: $l
+          width: $l
 
 
