@@ -1,3 +1,5 @@
-%ol.spiral{class: "fib_count_#{params[:fib_count]}"}
-  -20.times do
+%ol{class: "fib_count_#{params[:fib_count]} " + (params[:three_spiral] ? "three_spiral" : "")}
+  -15.times do
     %li
+.riesling.upcase{class: params[:no_text] ? "hide" : ""}
+  August 3, 2013

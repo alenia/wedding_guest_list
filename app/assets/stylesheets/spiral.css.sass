@@ -1,6 +1,12 @@
 $unit_length: 20px
+//currently only works up to here. also after this it gets HUUUUUGE
+$max_fib: 12
 $border_color: black
 $border_width: 2px
+body.spiral
+  font-size: 40px
+.hide
+  display: none
 
 @mixin rounded($vert, $horz, $radius)
   border-#{$vert}: 2*$border_width solid $border-color
@@ -9,36 +15,37 @@ $border_width: 2px
   -moz-border-radius-#{$vert}-#{$horz}: $radius
   -webkit-border-radius-#{$vert}-#{$horz}: $radius
 
-@mixin fib_spiral($fib_count)
+@mixin fib_spiral($fib_count, $three_spiral: false)
   width: fibonacci($fib_count + 1) * $unit_length
   height: fibonacci($fib_count) * $unit_length
   li
-    @for $i from $fib_count + 1 through 20
+    @for $i from $fib_count + 1 through $max_fib
       &:nth-child(#{$i})
         display: none
     @for $i from 1 through $fib_count
       $l: $unit_length * fibonacci($i)
       &:nth-child(#{$i}):after
-        @if $fib_count == 8
-          @if $i%4 == 0
-            @include rounded('bottom', 'right', $l)
-          @if $i%4 == 1
+        @if $three_spiral
+          @if $i%4 == $fib_count%4
             @include rounded('top', 'right', $l)
-          @if $i%4 == 2
+          @if $i%4 == ($fib_count + 1)%4
             @include rounded('top', 'left', $l)
-          @if $i%4 == 3
+          @if $i%4 == ($fib_count + 2)%4
             @include rounded('bottom', 'left', $l)
+          @if $i%4 == ($fib_count + 3)%4
+            @include rounded('bottom', 'right', $l)
         @else
-          @if $i%4 == 0
-            @include rounded('top', 'right', $l)
-          @if $i%4 == 1
-            @include rounded('top', 'left', $l)
-          @if $i%4 == 2
-            @include rounded('bottom', 'left', $l)
-          @if $i%4 == 3
+          @if $i%4 == $fib_count%4
             @include rounded('bottom', 'right', $l)
+          @if $i%4 == ($fib_count + 1)%4
+            @include rounded('top', 'right', $l)
+          @if $i%4 == ($fib_count + 2)%4
+            @include rounded('top', 'left', $l)
+          @if $i%4 == ($fib_count + 3)%4
+            @include rounded('bottom', 'left', $l)
+    //TODO for the love of god montresur this needs to be refactored
     &:nth-child(#{$fib_count})
-      left: $unit_length * fibonacci($fib_count - 1)
+      right: 0
     &:nth-child(#{$fib_count - 1})
       top: $unit_length * fibonacci($fib_count - 2)
     &:nth-child(#{$fib_count - 3})
@@ -69,12 +76,18 @@ $border_width: 2px
       left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 6) + fibonacci($fib_count - 10))
       top: $unit_length * (fibonacci($fib_count - 3) + fibonacci($fib_count - 7))
 
-
-ol.spiral
-  @for $i from 1 through 20
+body.spiral ol
+  &.fib_count_
+    &:not(.three_spiral)
+      @include fib_spiral(8)
+    &.three_spiral
+      @include fib_spiral(8, 'true')
+  @for $i from 1 through $max_fib
     &.fib_count_#{$i}
-      @include fib_spiral($i)
-  float: left
+      &:not(.three_spiral)
+        @include fib_spiral($i)
+      &.three_spiral
+        @include fib_spiral($i, 'true')
   position: relative
   list-style: none
   border: $border_width solid $border_color
@@ -90,7 +103,7 @@ ol.spiral
       content: ''
       display: block
       box-sizing: border-box
-    @for $i from 1 through 20
+    @for $i from 1 through $max_fib
       &:nth-child(#{$i})
         $l: $unit_length * fibonacci($i)
         height: $l
