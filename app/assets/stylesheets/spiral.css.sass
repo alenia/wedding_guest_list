@@ -1,12 +1,9 @@
-$unit_length: 20px
-//currently only works up to here. also after this it gets HUUUUUGE
-$max_fib: 12
 $border_color: black
+$unit_length: 20px
 $border_width: 2px
-body.spiral
-  font-size: 40px
-.hide
-  display: none
+// how many li's you have. Also, this gets gigantic. Your monitor is probably not.
+
+$max_fib: 12
 
 @mixin rounded($vert, $horz, $radius)
   border-#{$vert}: 2*$border_width solid $border-color
@@ -43,38 +40,33 @@ body.spiral
             @include rounded('top', 'left', $l)
           @if $i%4 == ($fib_count + 3)%4
             @include rounded('bottom', 'left', $l)
-    //TODO for the love of god montresur this needs to be refactored
-    &:nth-child(#{$fib_count})
-      right: 0
-    &:nth-child(#{$fib_count - 1})
-      top: $unit_length * fibonacci($fib_count - 2)
-    &:nth-child(#{$fib_count - 3})
-      left: $unit_length * fibonacci($fib_count - 2)
-    // Now onto inner things
-    &:nth-child(#{$fib_count - 4})
-      left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 5))
-      top: $unit_length * fibonacci($fib_count - 3)
-    &:nth-child(#{$fib_count - 5})
-      left: $unit_length * fibonacci($fib_count - 2)
-      top: $unit_length * (fibonacci($fib_count - 3) + fibonacci($fib_count - 6))
-    &:nth-child(#{$fib_count - 6})
-      left: $unit_length * fibonacci($fib_count - 2)
-      top: $unit_length * fibonacci($fib_count - 3)
-    &:nth-child(#{$fib_count - 7})
-      left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 6))
-      top: $unit_length * fibonacci($fib_count - 3)
-    &:nth-child(#{$fib_count - 8})
-      left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 6) + fibonacci($fib_count - 9))
-      top: $unit_length * (fibonacci($fib_count - 3) + fibonacci($fib_count - 7))
-    &:nth-child(#{$fib_count - 9})
-      left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 6))
-      top: $unit_length * (fibonacci($fib_count - 3) + fibonacci($fib_count - 7) + fibonacci($fib_count - 10))
-    &:nth-child(#{$fib_count - 10})
-      left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 6))
-      top: $unit_length * (fibonacci($fib_count - 3) + fibonacci($fib_count - 7))
-    &:nth-child(#{$fib_count - 11})
-      left: $unit_length * (fibonacci($fib_count - 2) + fibonacci($fib_count - 6) + fibonacci($fib_count - 10))
-      top: $unit_length * (fibonacci($fib_count - 3) + fibonacci($fib_count - 7))
+    $right-offset: 0
+    $bottom-offset: 0
+    $left-offset: 0
+    $top-offset: 0
+    @for $i from 0 to $fib_count
+      $j: $fib_count - $i
+      &:nth-child(#{$j})
+        @if $j%4 == $fib_count%4
+          right: $right-offset
+          bottom: $bottom-offset
+          $tmp: $right-offset
+          $right-offset: $tmp + $unit_length * fibonacci($j)
+        @if $j%4 == ($fib_count - 1)%4
+          bottom: $bottom-offset
+          left: $left-offset
+          $tmp: $bottom-offset
+          $bottom-offset: $tmp + $unit_length * fibonacci($j)
+        @if $j%4 == ($fib_count - 2)%4
+          left: $left-offset
+          top: $top-offset
+          $tmp: $left-offset
+          $left-offset: $tmp + $unit_length * fibonacci($j)
+        @if $j%4 == ($fib_count - 3)%4
+          top: $top-offset
+          right: $right-offset
+          $tmp: $top-offset
+          $top-offset: $tmp + $unit_length * fibonacci($j)
 
 body.spiral ol
   &.fib_count_
