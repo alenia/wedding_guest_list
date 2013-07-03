@@ -1,11 +1,17 @@
 $border_color: black
 $unit_length: 20px
 $border_width: 2px
-// how many li's you have. Also, this gets gigantic. Your monitor is probably not.
 
+// how many li's you have. Also, this gets gigantic. Your monitor is probably not.
 $max_fib: 12
 
-@mixin rounded($vert, $horz, $radius)
+@mixin arc($vert, $horz, $radius)
+  //clear out old values
+  border: 0
+  border-radius: 0
+  -moz-border-radius: 0
+  -webkit-border-radius: 0
+
   border-#{$vert}: 2*$border_width solid $border-color
   border-#{$horz}: 2*$border_width solid $border-color
   border-#{$vert}-#{$horz}-radius: $radius
@@ -16,57 +22,56 @@ $max_fib: 12
   width: fibonacci($fib_count + 1) * $unit_length
   height: fibonacci($fib_count) * $unit_length
   li
-    @for $i from $fib_count + 1 through $max_fib
-      &:nth-child(#{$i})
-        display: none
-    @for $i from 1 through $fib_count
-      $l: $unit_length * fibonacci($i)
-      &:nth-child(#{$i}):after
-        @if $three_spiral
-          @if $i%4 == $fib_count%4
-            @include rounded('top', 'right', $l)
-          @if $i%4 == ($fib_count + 1)%4
-            @include rounded('top', 'left', $l)
-          @if $i%4 == ($fib_count + 2)%4
-            @include rounded('bottom', 'left', $l)
-          @if $i%4 == ($fib_count + 3)%4
-            @include rounded('bottom', 'right', $l)
-        @else
-          @if $i%4 == $fib_count%4
-            @include rounded('bottom', 'right', $l)
-          @if $i%4 == ($fib_count + 1)%4
-            @include rounded('top', 'right', $l)
-          @if $i%4 == ($fib_count + 2)%4
-            @include rounded('top', 'left', $l)
-          @if $i%4 == ($fib_count + 3)%4
-            @include rounded('bottom', 'left', $l)
     $right-offset: 0
     $bottom-offset: 0
     $left-offset: 0
     $top-offset: 0
-    @for $i from 0 to $fib_count
+    @for $i from $fib_count + 1 through $max_fib
+      &:nth-child(#{$i})
+        display: none
+    @for $i from 0 through $fib_count
+      //Count down not  up
       $j: $fib_count - $i
+      $l: $unit_length * fibonacci($j)
       &:nth-child(#{$j})
         @if $j%4 == $fib_count%4
           right: $right-offset
           bottom: $bottom-offset
           $tmp: $right-offset
-          $right-offset: $tmp + $unit_length * fibonacci($j)
+          $right-offset: $tmp + $l
+          &:after
+            @include arc('bottom', 'right', $l)
         @if $j%4 == ($fib_count - 1)%4
           bottom: $bottom-offset
           left: $left-offset
           $tmp: $bottom-offset
-          $bottom-offset: $tmp + $unit_length * fibonacci($j)
+          $bottom-offset: $tmp + $l
+          &:after
+            @include arc('bottom', 'left', $l)
         @if $j%4 == ($fib_count - 2)%4
           left: $left-offset
           top: $top-offset
           $tmp: $left-offset
-          $left-offset: $tmp + $unit_length * fibonacci($j)
+          $left-offset: $tmp + $l
+          &:after
+            @include arc('top', 'left', $l)
         @if $j%4 == ($fib_count - 3)%4
           top: $top-offset
           right: $right-offset
           $tmp: $top-offset
-          $top-offset: $tmp + $unit_length * fibonacci($j)
+          $top-offset: $tmp + $l
+          &:after
+            @include arc('top', 'right', $l)
+      @if $three_spiral
+        &:nth-child(#{$j}):after
+          @if $j%4 == $fib_count%4
+            @include arc('top', 'right', $l)
+          @if $j%4 == ($fib_count + 1)%4
+            @include arc('top', 'left', $l)
+          @if $j%4 == ($fib_count + 2)%4
+            @include arc('bottom', 'left', $l)
+          @if $j%4 == ($fib_count + 3)%4
+            @include arc('bottom', 'right', $l)
 
 body.spiral ol
   &.fib_count_
