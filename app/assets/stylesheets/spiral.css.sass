@@ -37,29 +37,25 @@ $max_fib: 12
         @if $j%4 == $fib_count%4
           right: $right-offset
           bottom: $bottom-offset
-          $tmp: $right-offset
-          $right-offset: $tmp + $l
+          $right-offset: $right-offset + $l
           &:after
             @include arc('bottom', 'right', $l)
         @if $j%4 == ($fib_count - 1)%4
           bottom: $bottom-offset
           left: $left-offset
-          $tmp: $bottom-offset
-          $bottom-offset: $tmp + $l
+          $bottom-offset: $bottom-offset + $l
           &:after
             @include arc('bottom', 'left', $l)
         @if $j%4 == ($fib_count - 2)%4
           left: $left-offset
           top: $top-offset
-          $tmp: $left-offset
-          $left-offset: $tmp + $l
+          $left-offset: $left-offset + $l
           &:after
             @include arc('top', 'left', $l)
         @if $j%4 == ($fib_count - 3)%4
           top: $top-offset
           right: $right-offset
-          $tmp: $top-offset
-          $top-offset: $tmp + $l
+          $top-offset: $top-offset + $l
           &:after
             @include arc('top', 'right', $l)
       @if $three_spiral
