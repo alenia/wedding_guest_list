@@ -1,9 +1,9 @@
 $border_color: black
+$border_width: 1px
 $unit_length: 20px
-$border_width: 2px
 
 // how many li's you have. Also, this gets gigantic. Your monitor is probably not.
-$max_fib: 12
+$max_fib: 15
 
 @mixin arc($vert, $horz, $radius)
   //clear out old values
@@ -18,7 +18,7 @@ $max_fib: 12
   -moz-border-radius-#{$vert}-#{$horz}: $radius
   -webkit-border-radius-#{$vert}-#{$horz}: $radius
 
-@mixin fib_spiral($fib_count, $three_spiral: false)
+@mixin fib_spiral($fib_count, $unit_length, $three_spiral: false)
   width: fibonacci($fib_count + 1) * $unit_length
   height: fibonacci($fib_count) * $unit_length
   li
@@ -34,6 +34,11 @@ $max_fib: 12
       $j: $fib_count - $i
       $l: $unit_length * fibonacci($j)
       &:nth-child(#{$j})
+        height: $l
+        width: $l
+        &:after
+          height: $l
+          width: $l
         @if $j%4 == $fib_count%4
           right: $right-offset
           bottom: $bottom-offset
@@ -72,15 +77,29 @@ $max_fib: 12
 body.spiral ol
   &.fib_count_
     &:not(.three_spiral)
-      @include fib_spiral(8)
+      @include fib_spiral(8, $unit_length)
     &.three_spiral
-      @include fib_spiral(8, 'true')
-  @for $i from 1 through $max_fib
-    &.fib_count_#{$i}
-      &:not(.three_spiral)
-        @include fib_spiral($i)
-      &.three_spiral
-        @include fib_spiral($i, 'true')
+      @include fib_spiral(8, $unit_length, 'true')
+  @for $fib_count from 1 through $max_fib
+    $normalized_unit_length: 600px/fibonacci($fib_count)
+    &.fib_count_#{$fib_count}
+      li:nth-child(#{$fib_count}) span
+        font-family: 'Riesling'
+        display: inline
+        float: left
+        font-size: 460px
+        margin-left: 45px
+      &.normalize
+        &:not(.three_spiral)
+          @include fib_spiral($fib_count, $normalized_unit_length)
+        &.three_spiral
+          @include fib_spiral($fib_count, $normalized_unit_length, 'true')
+      &:not(.normalize)
+        &:not(.three_spiral)
+          @include fib_spiral($fib_count, $unit_length)
+        &.three_spiral
+          @include fib_spiral($fib_count, $unit_length, 'true')
+
   position: relative
   list-style: none
   border: $border_width solid $border_color
@@ -92,17 +111,11 @@ body.spiral ol
     margin: 0
     padding: 0
     display: block
+    span
+      display: none
     &:after
       content: ''
       display: block
       box-sizing: border-box
-    @for $i from 1 through $max_fib
-      &:nth-child(#{$i})
-        $l: $unit_length * fibonacci($i)
-        height: $l
-        width: $l
-        &:after
-          height: $l
-          width: $l
 
 

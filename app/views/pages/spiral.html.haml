@@ -1,5 +1,5 @@
-%ol{class: "fib_count_#{params[:fib_count]} " + (params[:three_spiral] ? "three_spiral" : "")}
-  -12.times do
+%ol{class: "fib_count_#{params[:fib_count]} " + (params[:three_spiral] ? "three_spiral " : "")+(params[:normalize] ? "normalize" : "")}
+  -15.times do |n|
     %li
-.riesling.upcase{class: params[:no_text] ? "hide" : ""}
-  August 3, 2013
+      -if params[:text]
+        %span= fib(n+1)
