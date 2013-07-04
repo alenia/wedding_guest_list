@@ -2,10 +2,9 @@ Wedding::Application.routes.draw do
   resources :guests
   resources :facebook_guests
 
-  get '/invite' => 'pages#invite'
-  get '/stripe_patterns' => 'pages#stripe_patterns'
-  get '/cakeulator' => 'pages#cakeulator'
-  get '/spiral' => 'pages#spiral'
+  ['invite','stripe_patterns','cakeulator','spiral','svg_spiral'].each do |action|
+    get "/#{action}" => "pages##{action}"
+  end
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   root :to => 'guests#index'
